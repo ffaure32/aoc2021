@@ -3,6 +3,19 @@ import numpy
 from utils.file_utils import get_lines
 
 
+def get_neighbours_coords(lines, num_row, num_col):
+    coords = set()
+    if num_row > 0:
+        coords.add((num_row - 1, num_col))
+    if num_row < len(lines) - 1:
+        coords.add((num_row + 1, num_col))
+    if num_col > 0:
+        coords.add((num_row, num_col - 1))
+    if num_col < len(lines[0]) - 1:
+        coords.add((num_row, num_col + 1))
+    return coords
+
+
 class PointWithNeighbours():
     value: int
     neighbours: set
@@ -10,14 +23,8 @@ class PointWithNeighbours():
     def __init__(self, lines, num_row, num_col):
         self.neighbours = set()
         self.value = int(lines[num_row][num_col])
-        if num_row > 0:
-            self.neighbours.add(int(lines[num_row - 1][num_col]))
-        if num_row < len(lines) - 1:
-            self.neighbours.add(int(lines[num_row + 1][num_col]))
-        if num_col > 0:
-            self.neighbours.add(int(lines[num_row][num_col - 1]))
-        if num_col < len(lines[0]) - 1:
-            self.neighbours.add(int(lines[num_row][num_col + 1]))
+        for coords in get_neighbours_coords(lines, num_row, num_col):
+            self.neighbours.add(int(lines[coords[0]][coords[1]]))
 
     def risk_level(self):
         if self.value < min(self.neighbours):
@@ -101,14 +108,8 @@ class Basin:
         self.add_to_basin(num_col, num_row)
 
     def add_to_basin(self, num_col, num_row):
-        if num_row > 0:
-            self.add_to_basin_with_coords(num_col, num_row - 1)
-        if num_row < len(self.lines) - 1:
-            self.add_to_basin_with_coords(num_col, num_row + 1)
-        if num_col > 0:
-            self.add_to_basin_with_coords(num_col - 1, num_row)
-        if num_col < len(self.lines[0]) - 1:
-            self.add_to_basin_with_coords(num_col + 1, num_row)
+        for coords in get_neighbours_coords(self.lines, num_row, num_col):
+            self.add_to_basin_with_coords(coords[1], coords[0])
 
     def add_to_basin_with_coords(self, num_col, num_row):
         point_to_add = (num_col, num_row)
