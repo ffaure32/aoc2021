@@ -37,14 +37,14 @@ def test_sample():
 
 def test_input():
     lines = get_lines('day9.txt')
-    assert calculate_risk_level(lines) == 15
+    assert calculate_risk_level(lines) == 530
 
 
 def calculate_risk_level(lines):
     points = set()
-    for num_line, row in enumerate(lines):
-        for num_col, row in enumerate(row):
-            points.add(PointWithNeighbours(lines, num_line, num_col))
+    for num_row in range(0, len(lines)):
+        for num_col in range(0, len(lines[0])):
+            points.add(PointWithNeighbours(lines, num_row, num_col))
     return sum([point.risk_level() for point in points])
 
 
@@ -61,7 +61,11 @@ def test_sample_part2():
 def test_input_part2():
     lines = get_lines('day9.txt')
     builder = BasinBuilder(lines)
-    assert builder.find_biggest_basins() == 1134
+    assert builder.find_biggest_basins() == 1019494
+
+
+def build_basin(lines, num_col, num_row):
+    return Basin(lines, num_col, num_row)
 
 
 class BasinBuilder:
@@ -72,18 +76,14 @@ class BasinBuilder:
         self.lines = lines
         self.coords_in_basin = set()
         self.basins = set()
-        for num_row, row in enumerate(lines):
-            for num_col, row in enumerate(row):
+        for num_row in range(0, len(lines)):
+            for num_col in range(0, len(lines[0])):
                 new_coord = (num_col, num_row)
                 value = int(lines[num_row][num_col])
                 if new_coord not in self.coords_in_basin and value < 9:
-                    basin = self.build_basin(lines, num_col, num_row)
+                    basin = build_basin(lines, num_col, num_row)
                     self.coords_in_basin.update(basin.points_in_basin)
                     self.basins.add(basin)
-
-    def build_basin(self, lines, num_col, num_row):
-        return Basin(lines, num_col, num_row)
-
 
     def find_biggest_basins(self):
         sorted_basins = sorted(self.basins)
@@ -119,6 +119,5 @@ class Basin:
     def size(self):
         return len(self.points_in_basin)
 
-
     def __lt__(self, other):
-        return len(self.points_in_basin) < len(other.points_in_basin)
+        return self.size() < other.size()
