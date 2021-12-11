@@ -1,3 +1,5 @@
+import numpy
+
 from utils.file_utils import get_lines
 
 
@@ -49,21 +51,22 @@ class Cavern:
             octopus.neighbours.add(self.cavern[index][j + 1])
 
     def step(self):
-        for i in range(len(self.cavern)):
-            for j in range(len(self.cavern[0])):
-                self.cavern[i][j].step()
+        for row in self.cavern:
+            for octopus in row:
+                octopus.step()
 
     def flash(self):
-        for i in range(len(self.cavern)):
-            for j in range(len(self.cavern[0])):
-                self.cavern[i][j].flash()
+        for row in self.cavern:
+            for octopus in row:
+                octopus.flash()
         self.total_count += self.count_flashes()
 
     def count_flashes(self):
         count = 0
-        for i in range(len(self.cavern)):
-            for j in range(len(self.cavern[0])):
-                if self.cavern[i][j].flashed:
+        numpy.array(self.cavern)
+        for row in self.cavern:
+            for octopus in row:
+                if octopus.flashed:
                     count += 1
         return count
 
@@ -120,7 +123,7 @@ def test_parse_real_input():
     lines = get_lines('day11.txt')
     cavern = Cavern(lines)
     cavern.play_steps()
-    assert cavern.total_count == 1656
+    assert cavern.total_count == 1637
 
 
 def test_parse_real_input_2():
