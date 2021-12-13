@@ -16,7 +16,7 @@ def test_parse_input_first_sample():
 
     all_pathes = compute_all_pathes(lines)
 
-    #assert all_pathes.count_valid() == 10
+    # assert all_pathes.count_valid() == 10
     assert all_pathes.count_valid() == 36
 
 
@@ -34,7 +34,7 @@ def test_parse_input_second_sample():
         'kj - dc',
     ]
     all_pathes = compute_all_pathes(lines)
-    #assert all_pathes.count_valid() == 19
+    # assert all_pathes.count_valid() == 19
     assert all_pathes.count_valid() == 103
 
 
@@ -62,7 +62,7 @@ def test_parse_input_third_sample():
 
     all_pathes = compute_all_pathes(lines)
 
-    #assert all_pathes.count_valid() == 226
+    # assert all_pathes.count_valid() == 226
     assert all_pathes.count_valid() == 3509
 
 
@@ -70,7 +70,7 @@ def test_parse_input():
     lines = get_lines('day12.txt')
     all_pathes = compute_all_pathes(lines)
 
-    #assert all_pathes.count_valid() == 4411
+    # assert all_pathes.count_valid() == 4411
     assert all_pathes.count_valid() == 136767
 
 
@@ -82,7 +82,7 @@ def compute_all_pathes(lines):
         elements = frozenset(split)
         segments.add(elements)
     start_points = {seg for seg in segments if 'start' in seg}
-    all_pathes = AllPathes()
+    all_pathes = AllPathes(segments)
     for start_point in start_points:
         new_path = Path(start_point, segments)
         all_pathes.add(new_path)
@@ -102,9 +102,9 @@ def get_other_point_for_segment(segment, point):
 
 
 class AllPathes():
-    def __init__(self) -> None:
+    def __init__(self, segments) -> None:
         self.pathes = set()
-        self.already_managed = set()
+        self.segments = segments
 
     def add(self, path):
         self.pathes.add(path)
@@ -113,12 +113,10 @@ class AllPathes():
         ongoing_pathes = {path for path in self.pathes if path.is_not_finished()}
         for path in ongoing_pathes:
             self.pathes.remove(path)
-            if path not in self.already_managed:
-                new_pathes = path.new_pathes()
-                for new_path in new_pathes:
-                    if new_path not in self.already_managed and new_path.is_valid():
-                        self.pathes.add(new_path)
-                self.already_managed.add(path)
+            new_pathes = path.new_pathes(self.segments)
+            for new_path in new_pathes:
+                if new_path.is_valid():
+                    self.pathes.add(new_path)
 
     def is_finished(self):
         return len({path for path in self.pathes if path.is_not_finished()}) == 0
@@ -141,39 +139,42 @@ class Path:
 
     def __init__(self, first_segment, all_segments) -> None:
         super().__init__()
-        self.all_segments = all_segments
-        self.oriented_segments = list()
+        self.lower_pass = set()
+        self.lower_double = False
+        self.valid = True
         self.path = list()
         next_point = get_other_point_for_segment(first_segment, 'start')
-        self.path.append('start')
-        self.path.append(next_point)
-        self.oriented_segments.append(['start', next_point])
+        self.add_path('start')
+        self.add_path(next_point)
 
     def is_not_finished(self):
         return self.path[-1] != 'end'
 
-    def new_pathes(self):
+    def new_pathes(self, all_segments):
         new_pathes = set()
         last_point = self.path[-1]
-        new_ways = {seg for seg in self.all_segments if last_point in seg}
+        new_ways = {seg for seg in all_segments if last_point in seg}
         for new_way in new_ways:
             oriented_segment = [last_point, get_other_point_for_segment(new_way, last_point)]
             if oriented_segment[1] != 'start':
                 new_path = copy.deepcopy(self)
-                new_path.path.append(oriented_segment[1])
-                new_path.oriented_segments.append(oriented_segment)
-                new_pathes.add(new_path)
+                new_path.add_path(oriented_segment[1])
+                if new_path.is_valid():
+                    new_pathes.add(new_path)
         return new_pathes
 
+    def add_path(self, point):
+        if point == point.lower():
+            if point in self.lower_pass:
+                if self.lower_double:
+                    self.valid = False
+                else:
+                    self.lower_double = True
+            self.lower_pass.add(point)
+        self.path.append(point)
+
     def is_valid(self):
-        point_count = collections.Counter(self.path)
-        lower_point_count = {key:value for (key, value) in point_count.items() if key.lower() == key}
-        values_count = collections.Counter(lower_point_count.values())
-        if len([key for key in values_count.keys() if key >2]) > 0:
-            return False
-        if values_count[2] > 1:
-            return False
-        return True
+        return self.valid
 
     def old_valid(self):
         point_count = collections.Counter(self.path)
