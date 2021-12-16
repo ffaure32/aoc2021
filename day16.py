@@ -3,12 +3,27 @@ import numpy
 from utils.file_utils import get_lines
 
 
-def convert_hexa_to_bit(my_hexdata):
-    scale = 16  ## equals to hexadecimal
+def convert_hexa_to_bit(hexa_string):
     num_of_bits = 4
-    to_complete = str(bin(int(my_hexdata, scale))[2:].zfill(num_of_bits))
+    hexa = int(hexa_string, 16)
+    to_complete = str(bin(hexa)[2:].zfill(num_of_bits))
+
+    count_leading_zeros = len(hexa_string) - len(hexa_string.lstrip('0'))
+    to_complete = add_leading_zeros(to_complete, count_leading_zeros, num_of_bits)
+
+    return complete_to_4(to_complete)
+
+
+def add_leading_zeros(to_complete, count_trailing_zeros, num_of_bits):
+    return '0' * count_trailing_zeros * num_of_bits + to_complete
+
+
+def complete_to_4(to_complete):
     to_complete_len = len(to_complete)
-    return to_complete.zfill(to_complete_len + to_complete_len % 4)
+    mod = to_complete_len % 4
+    if mod != 0:
+        return to_complete.zfill(to_complete_len + 4 - mod)
+    return to_complete
 
 
 def test_convert_hexa_to_bit():
@@ -19,6 +34,11 @@ def test_convert_hexa_to_bit():
 def test_convert_hexa_to_bit_withleft_pad():
     result = convert_hexa_to_bit('38006F45291200')
     assert result == '00111000000000000110111101000101001010010001001000000000'
+
+
+def test_convert_hexa_to_bit_with_0():
+    result = convert_hexa_to_bit('01')
+    assert result == '00000001'
 
 
 def test_convert_bin_to_int():
@@ -136,6 +156,7 @@ def test_compute_real_input():
     packet = Packet(convert_hexa_to_bit(input))
     assert packet.compute() == 2223947372407
 
+
 LITERAL = 4
 
 
@@ -201,4 +222,3 @@ class Packet:
             return 1 if computes[0] < computes[1] else 0
         elif self.typeId == 7:
             return 1 if computes[0] == computes[1] else 0
-
