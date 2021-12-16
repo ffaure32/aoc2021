@@ -3,27 +3,18 @@ import numpy
 from utils.file_utils import get_lines
 
 
-def convert_hexa_to_bit(hexa_string):
+def convert_hexa_char_to_bit(hexa_char):
     num_of_bits = 4
-    hexa = int(hexa_string, 16)
-    to_complete = str(bin(hexa)[2:].zfill(num_of_bits))
+    hexa = int(hexa_char, 16)
+    return str(bin(hexa)[2:].zfill(num_of_bits))
 
-    count_leading_zeros = len(hexa_string) - len(hexa_string.lstrip('0'))
-    to_complete = add_leading_zeros(to_complete, count_leading_zeros, num_of_bits)
 
-    return complete_to_4(to_complete)
+def convert_hexa_to_bit(hexa_string):
+    return ''.join(convert_hexa_char_to_bit(c) for c in hexa_string)
 
 
 def add_leading_zeros(to_complete, count_trailing_zeros, num_of_bits):
     return '0' * count_trailing_zeros * num_of_bits + to_complete
-
-
-def complete_to_4(to_complete):
-    to_complete_len = len(to_complete)
-    mod = to_complete_len % 4
-    if mod != 0:
-        return to_complete.zfill(to_complete_len + 4 - mod)
-    return to_complete
 
 
 def test_convert_hexa_to_bit():
