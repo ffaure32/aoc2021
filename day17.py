@@ -1,13 +1,5 @@
-from utils.file_utils import get_lines
-
-
-def test_real_input_1():
-    input = get_lines('day17.txt')
-    pass
-
-
 def test_computes_y():
-    ship = Spaceship(6, 3)
+    ship = Spaceship((6, 3), [])
     assert ship.compute_n_for_y(1) == 3
     assert ship.compute_n_for_y(2) == 5
     assert ship.compute_n_for_y(3) == 6
@@ -19,7 +11,7 @@ def test_computes_y():
 
 
 def test_computes_x():
-    ship = Spaceship(6, 3)
+    ship = Spaceship((6, 3), [])
     assert ship.compute_n_for_x(1) == 6
     assert ship.compute_n_for_x(2) == 11
     assert ship.compute_n_for_x(3) == 15
@@ -33,14 +25,6 @@ def test_computes_x():
 def test_min_x():
     assert find_min_x(20) == 6
     assert find_min_x(138) == 17
-
-
-class Target:
-    def __init__(self, target) -> None:
-        self.min_x = target[0]
-        self.max_x = target[1]
-        self.min_y = target[2]
-        self.max_y = target[3]
 
 
 def launch_ship(target, velocity):
@@ -58,11 +42,13 @@ def find_min_x(target_min_x):
         result = compute_step(n, n)
     return n
 
+
 def test_find_max_height_real_input():
     target = Target([138, 184, -71, -125])
     in_target = find_ships_in_target(target)
     assert max([ship.max_y() for ship in in_target]) == 7750
-    assert len(in_target) == 112
+    assert len(in_target) == 4120
+
 
 def test_find_max_height():
     target = Target([20, 30, -5, -10])
@@ -70,12 +56,13 @@ def test_find_max_height():
     assert max([ship.max_y() for ship in in_target]) == 45
     assert len(in_target) == 112
 
+
 def find_ships_in_target(target):
     ships = set()
     min_x = find_min_x(target.min_x)
     max_x = target.max_x
-    for vel_x in range(min_x, max_x+1):
-        for vel_y in range (target.max_y-1,abs(target.max_y)+1):
+    for vel_x in range(min_x, max_x + 1):
+        for vel_y in range(target.max_y - 1, abs(target.max_y) + 1):
             ship = launch_ship(target, (vel_x, vel_y))
             if ship.in_target():
                 ships.add(ship)
@@ -96,13 +83,6 @@ def test_reach_target():
     assert launch_ship(target, (6, 3)).in_target() is True
     assert launch_ship(target, (9, 0)).in_target() is True
     assert launch_ship(target, (17, -4)).in_target() is False
-
-
-def test_sample():
-    input = [
-
-    ]
-    pass
 
 
 class Spaceship:
@@ -143,3 +123,11 @@ class Spaceship:
 
 def compute_step(velocity, n):
     return int(n * velocity - (n * (n - 1)) / 2)
+
+
+class Target:
+    def __init__(self, target) -> None:
+        self.min_x = target[0]
+        self.max_x = target[1]
+        self.min_y = target[2]
+        self.max_y = target[3]
