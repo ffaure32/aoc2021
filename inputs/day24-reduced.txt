@@ -1,0 +1,252 @@
+inp w1
+mul x 0         x=0
+add x z         x=0
+mod x 26        x=0
+div z 1         z=0
+add x 10        x=10
+eql x w         x=0
+eql x 0         x=1
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=25
+add y 1         y=26
+mul z y         z=0
+mul y 0         y=0
+add y w         y=w1
+add y 12        y=w1+12
+mul y x         y=w1+12
+add z y         z=w1+12
+inp w2
+mul x 0         x=0
+add x z         x=w1+12
+mod x 26        x=w1+12
+div z 1         z=w1+12
+add x 12        x=w1+24
+eql x w         x=0
+eql x 0         x=1
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=25
+add y 1         y=26
+mul z y         z=26*(w1+12)
+mul y 0         y=0
+add y w         y=w2
+add y 7         y=w2+7
+mul y x         y=w2+7
+add z y         z=26*(w1+12)+w2+7
+inp w
+mul x 0         x=0
+add x z         x=26*(w1+12)+w2+7
+mod x 26        x=w2+7
+div z 1         z=26*(w1+12)+w2+7
+add x 10        x=w2+17
+eql x w         x=0
+eql x 0         x=1
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=25
+add y 1         y=26
+mul z y         z=26*(26*(w1+12)+w2+7)
+mul y 0         y=0
+add y w         y=w3
+add y 8         y=w3+8
+mul y x         y=w3+8
+add z y         z=26*(26*(w1+12)+w2+7)+w3+8
+inp w
+mul x 0         x=0
+add x z         x=26*(26*(w1+12)+w2+7)+w3+8
+mod x 26        x=w3+8
+div z 1         z=26*(26*(w1+12)+w2+7)+w3+8
+add x 12        x=w3+20
+eql x w         x=0
+eql x 0         x=1
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=25
+add y 1         y=26
+mul z y         z=26*(26*(26*(w1+12)+w2+7)+w3+8)
+mul y 0         y=0
+add y w         y=w4
+add y 8         y=w4+8
+mul y x         y=w4+8
+add z y         z=26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8
+inp w
+mul x 0         x=0
+add x z         x=26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8
+mod x 26        x=w4+8
+div z 1         z=26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8
+add x 11        x=w4+19
+eql x w         x=0
+eql x 0         x=1
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=25
+add y 1         y=26
+mul z y         z=26*(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)
+mul y 0         y=0
+add y w         y=w5
+add y 15        y=w5+15
+mul y x         y=w5+15
+add z y         z=26*(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)+w5+15
+inp w
+mul x 0         x=0
+add x z         x=26*(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)+w5+15
+mod x 26        x=w5+15
+div z 26        z=(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)
+add x -16       x=w5-1
+eql x w         x=1 si w6=w5-1 sinon x=0
+eql x 0         x=0
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=0
+add y 1         y=1
+mul z y         z=(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)
+mul y 0         y=0
+add y w         y=w6
+add y 12        y=w6+12
+mul y x         y=0
+add z y         z=(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8) ou z=(26*(w3+26w2+676w1+8302)+w4+8)*26+w6+12
+inp w
+mul x 0         x=0
+add x z         x=(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)
+mod x 26        x=w4+8
+div z 1         z=(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)
+add x 10        x=w4+18
+eql x w         x=0
+eql x 0         x=1
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=25
+add y 1         y=26
+mul z y         z=26*(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)
+mul y 0         y=0
+add y w         y=w7
+add y 8         y=w7+8
+mul y x         y=w7+8
+add z y         z=26*(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)+w7+8
+inp w
+mul x 0         x=0
+add x z         x=26*(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)+w7+8
+mod x 26        x=w7+8
+div z 26        z=(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)
+add x -11       x=w7-3
+eql x w         x=1 si w8=w7-3
+eql x 0         x=0
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=0
+add y 1         y=1
+mul z y         z=(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)
+mul y 0         y=0
+add y w         y=w8
+add y 13        y=w8+13
+mul y x         y=0
+add z y         z=(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)
+inp w
+mul x 0         x=0
+add x z         x=(26*(26*(26*(w1+12)+w2+7)+w3+8)+w4+8)
+mod x 26        x=w4+8
+div z 26        z=(26*(26*(w1+12)+w2+7)+w3+8)
+add x -13       x=w4-5
+eql x w         x=1 si w9=w4-5
+eql x 0         x=0
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=0
+add y 1         y=1
+mul z y         z=(26*(26*(w1+12)+w2+7)+w3+8)
+mul y 0         y=0
+add y w         y=w9
+add y 3         y=w9+3
+mul y x         y=0
+add z y         z=(26*(26*(w1+12)+w2+7)+w3+8)
+inp w10
+mul x 0         x=0
+add x z         x=(26*(26*(w1+12)+w2+7)+w3+8)
+mod x 26        x=w3+8
+div z 1         z=(26*(26*(w1+12)+w2+7)+w3+8)
+add x 13        x=w3+21
+eql x w         x=0
+eql x 0         x=1
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=25
+add y 1         y=26
+mul z y         z=26*(26*(26*(w1+12)+w2+7)+w3+8)
+mul y 0         y=0
+add y w         y=w10
+add y 13        y=w10+13
+mul y x         y=w10+13
+add z y         z=26*(26*(26*(w1+12)+w2+7)+w3+8)+w10+13
+inp w11
+mul x 0         x=0
+add x z         x=26*(26*(26*(w1+12)+w2+7)+w3+8)+w10+13
+mod x 26        x=w10+13
+div z 26        z=(26*(26*(w1+12)+w2+7)+w3+8)
+add x -8        x=w10+5
+eql x w         x=1 si w11=w10+5
+eql x 0         x=0
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=0
+add y 1         y=1
+mul z y         z=(26*(26*(w1+12)+w2+7)+w3+8)
+mul y 0         y=0
+add y w         y=w11
+add y 3         y=w11+3
+mul y x         y=0
+add z y         z=(26*(26*(w1+12)+w2+7)+w3+8)
+inp w12
+mul x 0         x=0
+add x z         x=(26*(26*(w1+12)+w2+7)+w3+8)
+mod x 26        x=w3+8
+div z 26        z=(26*(w1+12)+w2+7)
+add x -1        x=w3+7
+eql x w         x=1 si w12=w3+7
+eql x 0         x=0
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=0
+add y 1         y=1
+mul z y         z=(26*(w1+12)+w2+7)
+mul y 0         y=0
+add y w         y=w12
+add y 9         y=w12+9
+mul y x         y=0
+add z y         z=(26*(w1+12)+w2+7)
+inp w13
+mul x 0         x=0
+add x z         x=(26*(w1+12)+w2+7)
+mod x 26        x=w2+7
+div z 26        z=w1+12
+add x -4        x=w2+3
+eql x w         x=1 si w13=w2+3
+eql x 0         x=0
+mul y 0         y=0
+add y 25        y=25
+mul y x         y=0
+add y 1         y=1
+mul z y         z=(26*(w1+12)+w2+7)
+mul y 0         y=0
+add y w         y=w13
+add y 4         y=w13+4
+mul y x         y=0
+add z y         z=(26*(w1+12)+w2+7)
+inp w14
+mul x 0         x=0
+add x z         x=(26*(w1+12)+w2+7)
+mod x 26        x=w2+7
+div z 26        z=w1+12
+add x -14       x=w2-7
+eql x w         x=1 si w14=w2-7     sinon x=0
+eql x 0         x=0                 x=1
+mul y 0         y=0                 y=0
+add y 25        y=25                y=25
+mul y x         y=0                 y=25
+add y 1         y=1                 y=26
+mul z y         z=w1+12             y=26(w1+12)
+mul y 0         y=0                 y=0
+add y w         y=w14               y=w14
+add y 13        y=w14+13            y=w14+13
+mul y x         y=0                 y=w14+13
+add z y         z=w1+12             z=26(w1+12)+w14+13

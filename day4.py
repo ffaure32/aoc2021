@@ -64,7 +64,7 @@ def find_incomplete_grids(grids):
 
 
 def build_grids():
-    input = get_lines("day4.txt")
+    input = get_lines("day4_arnaud.txt")
     draws = [int(draw) for draw in input[0].split(',')]
     index = 1
     grids = list()
