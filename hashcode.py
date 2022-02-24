@@ -15,7 +15,8 @@ def test_read_input():
     hash_code("d_dense_schedule.in.txt")
     hash_code("e_exceptional_skills.in.txt")
     hash_code("f_find_great_mentors.in.txt")
-    #hash_code("a_an_example.in.txt")
+    hash_code("a_an_example.in.txt")
+    hash_code("b_better_start_small.in.txt")
 
 
 def hash_code(input_file):
@@ -26,7 +27,7 @@ def hash_code(input_file):
     nb_gens = int(line1[0])
     nb_projets = int(line1[1])
     persons = list()
-    projects = list()
+    projects = set()
     line = 1
     for _ in range(nb_gens):
         gen = input[line].split(' ')
@@ -44,7 +45,7 @@ def hash_code(input_file):
     for _ in range(nb_projets):
         proj = input[line].split(' ')
         project = Project(proj[0], int(proj[1]), int(proj[2]), int(proj[3]), int(proj[4]))
-        projects.append(project)
+        projects.add(project)
         line += 1
         for _ in range(int(proj[4])):
             tech = input[line].split(' ')
@@ -54,7 +55,7 @@ def hash_code(input_file):
             line += 1
 
     outputs = list()
-    for project in projects:
+    for project in sorted(projects):
         project_to_count = True
         output = Output(project.name)
         for skill in project.techno_skills:
@@ -126,10 +127,13 @@ class Project:
             levels.append(level)
             self.technos[techno] = levels
 
+    def __gt__(self, other):
+        return self.score > other.score
 
 class ProjectSkill:
     def __init__(self, techno, level) -> None:
         super().__init__()
         self.techno = techno
         self.level = level
+
 
