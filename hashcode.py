@@ -11,7 +11,10 @@ if __name__ == "__main__":
 
 
 def test_read_input():
-    hash_code("b_better_start_small.in.txt")
+    hash_code("c_collaboration.in.txt")
+    hash_code("d_dense_schedule.in.txt")
+    hash_code("e_exceptional_skills.in.txt")
+    hash_code("f_find_great_mentors.in.txt")
     #hash_code("a_an_example.in.txt")
 
 
@@ -54,10 +57,10 @@ def hash_code(input_file):
     for project in projects:
         project_to_count = True
         output = Output(project.name)
-        for techno in project.technos.keys():
+        for skill in project.techno_skills:
             find = False
             for person in persons:
-                if techno in person.technos.keys() and person.technos[techno] >= project.technos[techno]:
+                if person.name not in output.persons and skill.techno in person.technos.keys() and person.technos[skill.techno] >= skill.level:
                     output.add_person(person.name)
                     find = True
                     break
@@ -80,13 +83,16 @@ class Output:
         super().__init__()
         self.project_name = project_name
         self.persons = set()
+        self.ordered_persons = list()
 
     def add_person(self, name):
-        self.persons.add(name)
+        if name not in self.persons:
+            self.persons.add(name)
+            self.ordered_persons.append(name)
 
     def print(self, file):
            file.write(self.project_name+"\n")
-           file.write(' '.join(self.persons)+"\n")
+           file.write(' '.join(self.ordered_persons)+"\n")
 
 
 
@@ -109,6 +115,21 @@ class Project:
         self.score = score
         self.best_before = best_before
         self.nb_technos = nb_technos
+        self.techno_skills = list()
 
     def add_techno(self, techno, level):
-        self.technos[techno] = level
+        self.techno_skills.append(ProjectSkill(techno, level))
+        if techno in self.technos:
+            self.technos[techno].append(level)
+        else:
+            levels = list()
+            levels.append(level)
+            self.technos[techno] = levels
+
+
+class ProjectSkill:
+    def __init__(self, techno, level) -> None:
+        super().__init__()
+        self.techno = techno
+        self.level = level
+
