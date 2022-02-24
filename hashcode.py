@@ -11,26 +11,34 @@ def test_read_input():
     nb_projets = int(line1[1])
 
     persons = list()
-    project = list
+    projects = list()
 
     line = 1
-    for i in range(nb_gens):
+    for _ in range(nb_gens):
         gen = input[line].split(' ')
         name = gen[0]
         nb_technos = int(gen[1])
         line += 1
         person = Person(name, nb_technos)
         persons.append(person)
-        for j in range(nb_technos):
+        for _ in range(nb_technos):
             tech = input[line].split(' ')
             techno = tech[0]
             niveau = int(tech[1])
             person.add_techno(techno, niveau)
             line += 1
 
-    for i in range(nb_projets):
+    for _ in range(nb_projets):
         proj = input[line].split(' ')
         project = Project(proj[0], int(proj[1]), int(proj[2]), int(proj[3]), int(proj[4]))
+        projects.append(project)
+        line += 1
+        for _ in range(int(proj[4])):
+            tech = input[line].split(' ')
+            techno = tech[0]
+            niveau = int(tech[1])
+            project.add_techno(techno, niveau)
+            line += 1
 
 
 class Person:
