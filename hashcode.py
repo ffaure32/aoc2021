@@ -40,6 +40,7 @@ def test_read_input():
             project.add_techno(techno, niveau)
             line += 1
 
+    print(projects)
 
 class Person:
     def __init__(self, name, nb_technos) -> None:
