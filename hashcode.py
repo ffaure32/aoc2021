@@ -52,12 +52,20 @@ def hash_code(input_file):
 
     outputs = list()
     for project in projects:
+        project_to_count = True
         output = Output(project.name)
         for techno in project.technos.keys():
+            find = False
             for person in persons:
                 if techno in person.technos.keys() and person.technos[techno] >= project.technos[techno]:
                     output.add_person(person.name)
-        if len(output.persons) > 0:
+                    find = True
+                    break
+            if find is False:
+                project_to_count = False
+                break
+
+        if len(output.persons) > 0 and project_to_count:
             outputs.append(output)
 
     f.write(str(len(outputs))+"\n")
@@ -71,10 +79,10 @@ class Output:
     def __init__(self, project_name) -> None:
         super().__init__()
         self.project_name = project_name
-        self.persons = list()
+        self.persons = set()
 
     def add_person(self, name):
-        self.persons.append(name)
+        self.persons.add(name)
 
     def print(self, file):
            file.write(self.project_name+"\n")
