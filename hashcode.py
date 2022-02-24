@@ -3,6 +3,12 @@ import numpy as np
 from utils.file_utils import get_lines
 
 
+def main():
+    hash_code("b_better_start_small.in.txt")
+
+if __name__ == "__main__":
+    main()
+
 
 def test_read_input():
     hash_code("b_better_start_small.in.txt")
@@ -10,6 +16,8 @@ def test_read_input():
 
 
 def hash_code(input_file):
+    f = open("output"+input_file, "w")
+
     input = get_lines(input_file)
     line1 = input[0].split(' ')
     nb_gens = int(line1[0])
@@ -41,7 +49,6 @@ def hash_code(input_file):
             niveau = int(tech[1])
             project.add_techno(techno, niveau)
             line += 1
-    print()
 
     outputs = list()
     for project in projects:
@@ -53,9 +60,11 @@ def hash_code(input_file):
         if len(output.persons) > 0:
             outputs.append(output)
 
-    print(len(outputs))
+    f.write(str(len(outputs))+"\n")
     for output in outputs:
-        output.print()
+        output.print(f)
+
+    f.close()
 
 class Output:
 
@@ -67,9 +76,9 @@ class Output:
     def add_person(self, name):
         self.persons.append(name)
 
-    def print(self):
-        print(self.project_name)
-        print(' '.join(self.persons))
+    def print(self, file):
+           file.write(self.project_name+"\n")
+           file.write(' '.join(self.persons)+"\n")
 
 
 
