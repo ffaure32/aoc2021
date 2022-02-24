@@ -11,6 +11,7 @@ def test_read_input():
     nb_projets = int(line1[1])
 
     persons = list()
+    project = list
 
     line = 1
     for i in range(nb_gens):
@@ -18,35 +19,39 @@ def test_read_input():
         name = gen[0]
         nb_technos = int(gen[1])
         line += 1
-        person = Person(name)
+        person = Person(name, nb_technos)
         persons.append(person)
         for j in range(nb_technos):
             tech = input[line].split(' ')
             techno = tech[0]
             niveau = int(tech[1])
             person.add_techno(techno, niveau)
-            line +=1
+            line += 1
 
     for i in range(nb_projets):
-        pass
+        proj = input[line].split(' ')
+        project = Project(proj[0], int(proj[1]), int(proj[2]), int(proj[3]), int(proj[4]))
 
 
 class Person:
-    def __init__(self, name) -> None:
+    def __init__(self, name, nb_technos) -> None:
         self.name = name
+        self.nb_technos = nb_technos
         self.technos = dict()
 
     def add_techno(self, techno, level):
         self.technos[techno] = level
 
+
 class Project:
-    def __init__(self, name, length, score, best_before) -> None:
+    def __init__(self, name, length, score, best_before, nb_technos) -> None:
         super().__init__()
         self.name = name
         self.technos = dict()
         self.length = length
         self.score = score
         self.best_before = best_before
+        self.nb_technos = nb_technos
 
     def add_techno(self, techno, level):
         self.technos[techno] = level
