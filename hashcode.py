@@ -20,13 +20,14 @@ def test_read_input():
 
 
 def hash_code(input_file):
-    f = open("output"+input_file, "w")
+    f = open(input_file+"output.txt", "w")
 
     input = get_lines(input_file)
     line1 = input[0].split(' ')
     nb_gens = int(line1[0])
     nb_projets = int(line1[1])
-    persons = list()
+    persons = set()
+    persone_by_name = dict()
     projects = set()
     line = 1
     for _ in range(nb_gens):
@@ -35,7 +36,8 @@ def hash_code(input_file):
         nb_technos = int(gen[1])
         line += 1
         person = Person(name, nb_technos)
-        persons.append(person)
+        persons.add(person)
+        persone_by_name[name] = person
         for _ in range(nb_technos):
             tech = input[line].split(' ')
             techno = tech[0]
@@ -60,9 +62,10 @@ def hash_code(input_file):
         output = Output(project.name)
         for skill in project.techno_skills:
             find = False
-            for person in persons:
+            filtered_persons = (person for person in persons if skill.techno in person.technos and skill.level <= person.technos[skill.techno])
+            for person in sorted(filtered_persons):
                 if person.name not in output.persons and skill.techno in person.technos.keys() and person.technos[skill.techno] >= skill.level:
-                    output.add_person(person.name)
+                    output.add_person(skill.techno, person.name)
                     find = True
                     break
             if find is False:
@@ -71,6 +74,11 @@ def hash_code(input_file):
 
         if len(output.persons) > 0 and project_to_count:
             outputs.append(output)
+            for techno in output.techno_person.keys():
+                person = persone_by_name[output.techno_person[techno]]
+                if project.technos[techno] == person.technos[techno]:
+                    person.technos[techno] += 1
+                    person.nb_projects += 1
 
     f.write(str(len(outputs))+"\n")
     for output in outputs:
@@ -84,11 +92,13 @@ class Output:
         super().__init__()
         self.project_name = project_name
         self.persons = set()
+        self.techno_person = dict()
         self.ordered_persons = list()
 
-    def add_person(self, name):
+    def add_person(self, techno, name):
         if name not in self.persons:
             self.persons.add(name)
+            self.techno_person[techno] = name
             self.ordered_persons.append(name)
 
     def print(self, file):
@@ -102,9 +112,13 @@ class Person:
         self.name = name
         self.nb_technos = nb_technos
         self.technos = dict()
+        self.nb_projects = 1
 
     def add_techno(self, techno, level):
         self.technos[techno] = level
+
+    def __gt__(self, other):
+        return sum(self.technos.values())*self.nb_projects > sum(other.technos.values())*other.nb_projects
 
 
 class Project:
@@ -128,7 +142,7 @@ class Project:
             self.technos[techno] = levels
 
     def __gt__(self, other):
-        return self.score > other.score
+        return self.score * self.score / self.length / self.best_before < other.score * other.score / other.length / other.best_before
 
 class ProjectSkill:
     def __init__(self, techno, level) -> None:
