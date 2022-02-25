@@ -1,4 +1,5 @@
 import numpy as np
+from numpy import prod
 
 from utils.file_utils import get_lines
 
@@ -58,12 +59,17 @@ def hash_code(input_file):
 
     outputs = list()
     for project in sorted(projects):
+        even = 0
         project_to_count = True
         output = Output(project.name)
         for skill in project.techno_skills:
             find = False
-            filtered_persons = (person for person in persons if skill.techno in person.technos and skill.level <= person.technos[skill.techno])
-            for person in sorted(filtered_persons):
+            filtered_persons = {person for person in persons if skill.techno in person.technos and skill.level <= person.technos[skill.techno]}
+            if even %2 == 0 :
+                sorted_people = sorted(filtered_persons)
+            else:
+                sorted_people = reversed(sorted(filtered_persons))
+            for person in sorted_people:
                 if person.name not in output.persons and skill.techno in person.technos.keys() and person.technos[skill.techno] >= skill.level:
                     output.add_person(skill.techno, person.name)
                     find = True
@@ -71,6 +77,7 @@ def hash_code(input_file):
             if find is False:
                 project_to_count = False
                 break
+            even +=1
 
         if len(output.persons) > 0 and project_to_count:
             outputs.append(output)
@@ -118,7 +125,7 @@ class Person:
         self.technos[techno] = level
 
     def __gt__(self, other):
-        return sum(self.technos.values())*self.nb_projects > sum(other.technos.values())*other.nb_projects
+        return float(self.nb_projects) / sum(self.technos.values()) > float(other.nb_projects) / sum(other.technos.values())
 
 
 class Project:
